@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "structs.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -18,11 +19,14 @@ public:
 private slots:
     void on_tabWidget_currentChanged(int index);
 
+    void on_addButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 
-    std::vector<std::map<std::string, int>> *labels;
-    std::vector<std::map<std::string, std::pair<int, std::vector<std::map<std::string, int>>>>> *toppings;
+    std::vector<Label> *labels;
+    std::vector<Topping> *toppings;
+    std::vector<Pizza> *pizzas;
 
 };
 #endif // MAINWINDOW_H
