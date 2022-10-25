@@ -15,7 +15,14 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_tabWidget_currentChanged(int index);
+
 private:
     Ui::MainWindow *ui;
+
+    std::vector<std::map<std::string, int>> *labels;
+    std::vector<std::map<std::string, std::pair<int, std::vector<std::map<std::string, int>>>>> *toppings;
+
 };
 #endif // MAINWINDOW_H
