@@ -37,7 +37,7 @@ void MainWindow::on_addButton_clicked()
 
 void MainWindow::setLabel(QListWidgetItem* item)
 {
-    for (Label l: *labels)
+    for (Label &l: *labels)
     {
         if (item->text().toStdString() == l.name) { l.selected = !l.selected; }
     }
@@ -47,18 +47,17 @@ void MainWindow::on_addButton_2_clicked()
 {
     std::string name = ui->nameLineEdit_2->text().toStdString();
     int price = ui->priceLineEdit->value();
-    std::vector<Label> selected_labels;
+    std::vector<Label> selected_labels = {};
 
     std::string all_labels = "";
     for (Label l: *labels)
     {
-        if (l.selected) { selected_labels.push_back(l); }
-        all_labels += l.name + " ";
+        if (l.selected) { selected_labels.push_back(l); all_labels += l.name + " "; }
     }
 
     toppings->push_back({name, price, selected_labels});
 
-    ui->existingtopping_listWidget->addItem(QString::fromStdString(name + " [" + std::to_string(price) + all_labels + "]"));
+    ui->existingtopping_listWidget->addItem(QString::fromStdString(name + " [" + std::to_string(price) + " " + all_labels + "]"));
 
     QListWidgetItem *item = new QListWidgetItem(QString::fromStdString(name));
     item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
@@ -69,9 +68,34 @@ void MainWindow::on_addButton_2_clicked()
 
 void MainWindow::setTopping(QListWidgetItem* item)
 {
-    for (Topping t: *toppings)
+    for (Topping &t: *toppings)
     {
         if (item->text().toStdString() == t.name) { t.selected = !t.selected; }
     }
+}
+
+
+void MainWindow::on_addButton_3_clicked()
+{
+    std::string name = ui->nameLineEdit_3->text().toStdString();
+    int base_price = ui->basepriceSpinBox->value();
+    std::vector<Topping> selected_toppings = {};
+
+    std::string all_toppings = "";
+    for (Topping t: *toppings)
+    {
+        if (t.selected) { selected_toppings.push_back(t); all_toppings += t.name + " "; }
+    }
+
+    Pizza pizza(name, base_price, selected_toppings); // crashes with string length error when too many toppings are selected, CHECK IT
+    pizzas->push_back(pizza);
+
+    std::string all_labels = "";
+    for (Label l: pizzas->back().labels)
+    {
+        all_labels += l.name + " ";
+    }
+
+    ui->existingpizza_listWidget->addItem(QString::fromStdString(name + " [" + std::to_string(base_price) + " " + all_toppings + all_labels + std::to_string(pizzas->back().full_price) + " " + "]"));
 }
 

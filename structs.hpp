@@ -27,7 +27,8 @@ struct Pizza
     std::vector<Topping> toppings;
 
     std::vector<Label> labels;
-    Pizza(std::string p_name, int p_base_price, std::vector<Topping> p_toppings) : name(p_name), base_price(p_base_price), toppings(p_toppings) // set labels for the pizza
+    int full_price;
+    Pizza(std::string p_name, int p_base_price, std::vector<Topping> p_toppings) : name(p_name), base_price(p_base_price), toppings(p_toppings), full_price(base_price) // set labels and full price for the pizza
     {
         for (Topping t: toppings)
         {
@@ -53,6 +54,7 @@ struct Pizza
                     if (!found_other) { labels.push_back(t_l); }
                 }
             }
+            full_price += t.price;
         }
     }
 };

@@ -28,6 +28,8 @@ private slots:
 
     void setTopping(QListWidgetItem* item);
 
+    void on_addButton_3_clicked();
+
 private:
     Ui::MainWindow *ui;
 
