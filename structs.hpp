@@ -8,7 +8,8 @@
 struct Label
 {
     std::string name;
-    int mode : 1; // 0 - contains; 1 - all
+    int mode; // 0 - contains; 1 - all (no real reason for restricting to one bit, just trying it out)
+    bool selected = false;
 };
 
 struct Topping
@@ -16,6 +17,7 @@ struct Topping
     std::string name;
     int price;
     std::vector<Label> labels;
+    bool selected = false;
 };
 
 struct Pizza

@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QListWidget>
 #include "structs.hpp"
 
 QT_BEGIN_NAMESPACE
@@ -20,6 +21,12 @@ private slots:
     void on_tabWidget_currentChanged(int index);
 
     void on_addButton_clicked();
+
+    void setLabel(QListWidgetItem* item);
+
+    void on_addButton_2_clicked();
+
+    void setTopping(QListWidgetItem* item);
 
 private:
     Ui::MainWindow *ui;
