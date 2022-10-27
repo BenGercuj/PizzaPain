@@ -30,11 +30,19 @@ struct Pizza
     int full_price;
     Pizza(std::string p_name, int p_base_price, std::vector<Topping> p_toppings) : name(p_name), base_price(p_base_price), toppings(p_toppings), full_price(base_price) // set labels and full price for the pizza
     {
-        for (Topping t: toppings)
+        for (Topping &t: toppings)
         {
-            for (Label t_l: t.labels)
+            for (Label &t_l: t.labels)
             {
-                if (t_l.mode == 0) { labels.push_back(t_l); }
+                if (t_l.mode == 0)
+                {
+                    bool already_found = false;
+                    for (Label &l: labels)
+                    {
+                        if (t_l.name == l.name) { already_found = true; }
+                    }
+                    if (!already_found) { labels.push_back(t_l); }
+                }
                 else
                 {
                     bool found_other = false;
@@ -51,7 +59,15 @@ struct Pizza
                         }
                     }
 
-                    if (!found_other) { labels.push_back(t_l); }
+                    if (!found_other)
+                    {
+                        bool already_found = false;
+                        for (Label &l: labels)
+                        {
+                            if (t_l.name == l.name) { already_found = true; }
+                        }
+                        if (!already_found) { labels.push_back(t_l); }
+                    }
                 }
             }
             full_price += t.price;
