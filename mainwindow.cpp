@@ -6,6 +6,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow), labels(new std::vector<Label>), toppings(new std::vector<Topping>), pizzas(new std::vector<Pizza>)
 {
     ui->setupUi(this);
+    QObject::connect(ui->label_listWidget, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(setLabel(QListWidgetItem*)));
+    QObject::connect(ui->topping_listWidget, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(setTopping(QListWidgetItem*)));
 }
 
 MainWindow::~MainWindow()
@@ -32,7 +34,6 @@ void MainWindow::on_addButton_clicked()
     item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
     item->setCheckState(Qt::Unchecked);
     ui->label_listWidget->addItem(item);
-    QObject::connect(ui->label_listWidget, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(setLabel(QListWidgetItem*)));
 }
 
 void MainWindow::setLabel(QListWidgetItem* item)
@@ -63,7 +64,6 @@ void MainWindow::on_addButton_2_clicked()
     item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
     item->setCheckState(Qt::Unchecked);
     ui->topping_listWidget->addItem(item);
-    QObject::connect(ui->topping_listWidget, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(setTopping(QListWidgetItem*)));
 }
 
 void MainWindow::setTopping(QListWidgetItem* item)
@@ -87,7 +87,7 @@ void MainWindow::on_addButton_3_clicked()
         if (t.selected) { selected_toppings.push_back(t); all_toppings += t.name + " "; }
     }
 
-    Pizza pizza(name, base_price, selected_toppings); // crashes with string length error when too many toppings are selected, CHECK IT
+    Pizza pizza(name, base_price, selected_toppings);
     pizzas->push_back(pizza);
 
     std::string all_labels = "";
