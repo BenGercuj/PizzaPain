@@ -3,7 +3,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow), labels(new std::vector<Label>), toppings(new std::vector<Topping>), pizzas(new std::vector<Pizza>)
+    , ui(new Ui::MainWindow), labels(new std::vector<Label>), toppings(new std::vector<Topping>), pizzas(new std::vector<Pizza>), basics(new Basics)
 {
     ui->setupUi(this);
     QObject::connect(ui->label_listWidget, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(setLabel(QListWidgetItem*)));
@@ -97,5 +97,19 @@ void MainWindow::on_addButton_3_clicked()
     }
 
     ui->existingpizza_listWidget->addItem(QString::fromStdString(name + " [" + std::to_string(base_price) + " " + all_toppings + all_labels + std::to_string(pizzas->back().full_price) + " " + "]"));
+}
+
+
+void MainWindow::on_save_pushButton_clicked()
+{
+    basics->name = ui->shopnameLineEdit->text();
+    basics->transport_cost = ui->transportcostspinBox->value();
+    basics->open_hours[0].first = ui->mStart->time().toString(); basics->open_hours[0].second = ui->mEnd->time().toString();
+    basics->open_hours[1].first = ui->tStart->time().toString(); basics->open_hours[1].second = ui->tEnd->time().toString();
+    basics->open_hours[2].first = ui->wStart->time().toString(); basics->open_hours[2].second = ui->wEnd->time().toString();
+    basics->open_hours[3].first = ui->thStart->time().toString(); basics->open_hours[3].second = ui->thEnd->time().toString();
+    basics->open_hours[4].first = ui->fStart->time().toString(); basics->open_hours[4].second = ui->fEnd->time().toString();
+    basics->open_hours[5].first = ui->satStart->time().toString(); basics->open_hours[5].second = ui->satEnd->time().toString();
+    basics->open_hours[6].first = ui->sunStart->time().toString(); basics->open_hours[6].second = ui->sunEnd->time().toString();
 }
 

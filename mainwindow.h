@@ -30,12 +30,15 @@ private slots:
 
     void on_addButton_3_clicked();
 
+    void on_save_pushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 
     std::vector<Label> *labels;
     std::vector<Topping> *toppings;
     std::vector<Pizza> *pizzas;
+    Basics *basics;
 
 };
 #endif // MAINWINDOW_H

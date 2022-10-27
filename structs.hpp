@@ -3,12 +3,20 @@
 
 #include <string>
 #include <vector>
+#include <QString>
 #endif // STRUCTS_HPP
+
+struct Basics
+{
+    QString name;
+    std::pair<QString, QString> open_hours[7];
+    int transport_cost;
+};
 
 struct Label
 {
     std::string name;
-    int mode; // 0 - contains; 1 - all (no real reason for restricting to one bit, just trying it out)
+    int mode; // 0 - contains; 1 - all
     bool selected = false;
 };
 
