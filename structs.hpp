@@ -56,13 +56,20 @@ struct Pizza
                     bool found_other = false;
                     for (size_t i = 0; i < toppings.size(); i++)
                     {
-                        for (size_t j = 0; j < toppings[i].labels.size(); j++)
+                        if (i < toppings.size())
                         {
-                            if (toppings[i].labels[j].name != t_l.name)
-                            {
-                                found_other = true;
-                                j = toppings[i].labels.size();
-                                i = toppings.size();
+                            size_t sizexd = toppings[i].labels.size();
+                            if (sizexd == 0) { found_other = true; }
+                            else {
+                                for (size_t j = 0; j < sizexd; j++)
+                                {
+                                    if (toppings[i].labels[j].name != t_l.name)
+                                    {
+                                        found_other = true;
+                                        j = toppings[i].labels.size();
+                                        i = toppings.size();
+                                    }
+                                }
                             }
                         }
                     }
