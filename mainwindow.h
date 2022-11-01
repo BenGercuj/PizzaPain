@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QListWidget>
+#include <QFileDialog>
 #include "structs.hpp"
 
 QT_BEGIN_NAMESPACE
@@ -31,6 +32,10 @@ private slots:
     void on_addButton_3_clicked();
 
     void on_save_pushButton_clicked();
+
+    void on_actionKil_p_s_triggered();
+
+    void on_actionKiment_s_triggered();
 
 private:
     Ui::MainWindow *ui;

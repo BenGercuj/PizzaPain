@@ -113,3 +113,55 @@ void MainWindow::on_save_pushButton_clicked()
     basics->open_hours[6].first = ui->sunStart->time().toString(); basics->open_hours[6].second = ui->sunEnd->time().toString();
 }
 
+
+void MainWindow::on_actionKil_p_s_triggered()
+{
+    QCoreApplication::quit();
+}
+
+
+void MainWindow::on_actionKiment_s_triggered()
+{
+    QString filename = QFileDialog::getSaveFileName(this, tr("Mentés"), "/home/state.pizzapain", tr("Very Special Totally Not Text Files (*.pizzapain)"));
+
+    if (!filename.isNull())
+    {
+        QFile file(filename);
+        if (file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QTextStream ts(&file);
+
+            ts << basics->name << ';' << basics->transport_cost << "\n";
+            for (size_t i = 0; i < 7; i++)
+            {
+                ts << basics->open_hours->first << '-' << basics->open_hours->second;
+                if (i != 6) { ts << ';'; } else { ts << "\n"; }
+            }
+
+            for (size_t i = 0; i < labels->size(); i++)
+            {
+                ts << QString::fromStdString((*labels)[i].name) << ';' << (*labels)[i].mode << "\n";
+            }
+            ts << "#\n";
+
+            for (size_t i = 0; i < toppings->size(); i++)
+            {
+                ts << QString::fromStdString((*toppings)[i].name) << ';' << (*toppings)[i].price << "\n";
+            }
+            ts << "##\n";
+
+            for (size_t i = 0; i < pizzas->size(); i++)
+            {
+                ts << QString::fromStdString((*pizzas)[i].name) << ';' << (*pizzas)[i].base_price << "\n";
+                for (size_t j = 0; j < (*pizzas)[i].toppings.size(); j++)
+                {
+                    ts << QString::fromStdString((*pizzas)[i].toppings[j].name);
+                    if (j != (*pizzas)[i].toppings.size()-1) { ts << ';'; } else { ts << "\n"; }
+                }
+            }
+        }
+
+        file.close();
+    }
+}
+

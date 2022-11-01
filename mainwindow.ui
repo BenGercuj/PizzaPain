@@ -319,8 +319,33 @@
      <height>25</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuF_jl">
+    <property name="title">
+     <string>Fájl</string>
+    </property>
+    <addaction name="actionBet_lt_s"/>
+    <addaction name="actionKiment_s"/>
+    <addaction name="separator"/>
+    <addaction name="actionKil_p_s"/>
+   </widget>
+   <addaction name="menuF_jl"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionBet_lt_s">
+   <property name="text">
+    <string>Betöltés</string>
+   </property>
+  </action>
+  <action name="actionKiment_s">
+   <property name="text">
+    <string>Kimentés</string>
+   </property>
+  </action>
+  <action name="actionKil_p_s">
+   <property name="text">
+    <string>Kilépés</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
