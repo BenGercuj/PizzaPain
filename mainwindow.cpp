@@ -146,7 +146,12 @@ void MainWindow::on_actionKiment_s_triggered()
 
             for (size_t i = 0; i < toppings->size(); i++)
             {
-                ts << QString::fromStdString((*toppings)[i].name) << ';' << (*toppings)[i].price << "\n";
+                ts << QString::fromStdString((*toppings)[i].name) << ';' << (*toppings)[i].price;
+                for (size_t j = 0; j < (*toppings)[i].labels.size(); j++)
+                {
+                    ts << ';' << QString::fromStdString((*toppings)[i].labels[j].name);
+                }
+                ts << "\n";
             }
             ts << "##\n";
 
@@ -162,6 +167,21 @@ void MainWindow::on_actionKiment_s_triggered()
         }
 
         file.close();
+    }
+}
+
+
+void MainWindow::on_actionBet_lt_s_triggered()
+{
+    QString filename = QFileDialog::getOpenFileName(this, tr("Megnyitás"), "/home/state.pizzapain", tr("Very Special Totally Not Text Files (*.pizzapain)"));
+
+    if (!filename.isNull())
+    {
+        QFile file(filename);
+        if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+            //
+        }
     }
 }
 

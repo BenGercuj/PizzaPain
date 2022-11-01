@@ -37,6 +37,8 @@ private slots:
 
     void on_actionKiment_s_triggered();
 
+    void on_actionBet_lt_s_triggered();
+
 private:
     Ui::MainWindow *ui;
 
