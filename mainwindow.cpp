@@ -134,7 +134,7 @@ void MainWindow::on_actionKiment_s_triggered()
             ts << basics->name << ';' << basics->transport_cost << "\n";
             for (size_t i = 0; i < 7; i++)
             {
-                ts << basics->open_hours->first << '-' << basics->open_hours->second;
+                ts << basics->open_hours->first << ';' << basics->open_hours->second;
                 if (i != 6) { ts << ';'; } else { ts << "\n"; }
             }
 
@@ -164,6 +164,7 @@ void MainWindow::on_actionKiment_s_triggered()
                     if (j != (*pizzas)[i].toppings.size()-1) { ts << ';'; } else { ts << "\n"; }
                 }
             }
+            ts << "###\n";
         }
 
         file.close();
@@ -180,8 +181,89 @@ void MainWindow::on_actionBet_lt_s_triggered()
         QFile file(filename);
         if (file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
-            //
+            QTextStream ts(&file);
+            QString holder;
+            QStringList subholder;
+
+            // BASICS
+
+            Basics b_plh;
+            ts.readLineInto(&holder);
+            subholder = holder.split(';');
+
+            b_plh.name = subholder[0];
+            b_plh.transport_cost = subholder[1].toInt();
+
+            ts.readLineInto(&holder);
+            subholder = holder.split(';');
+            for (int i = 0; i < 7; i++)
+            {
+                b_plh.open_hours[i].first = subholder[i*2];
+                b_plh.open_hours[i].second = subholder[i*2+1];
+            }
+            this->basics = &b_plh;
+
+            // LABELS
+
+            ts.readLineInto(&holder);
+            labels->clear();
+            while (holder != '#')
+            {
+                subholder = holder.split(';');
+                labels->push_back({subholder[0].toStdString(), subholder[1].toInt(), false});
+                ts.readLineInto(&holder);
+            }
+
+            // TOPPINGS
+
+            ts.readLineInto(&holder);
+            toppings->clear();
+            while (holder != "##")
+            {
+                subholder = holder.split(';');
+                Topping t_plh;
+
+                t_plh.name = subholder[0].toStdString(); t_plh.price = subholder[1].toInt();
+                for (int i = 2; i < subholder.size(); i++)
+                {
+                    for (Label l: *labels)
+                    {
+                        if (subholder[i].toStdString() == l.name) { t_plh.labels.push_back(l); }
+                    }
+                }
+
+                toppings->push_back(t_plh);
+                ts.readLineInto(&holder);
+            }
+
+            // PIZZAS
+
+            ts.readLineInto(&holder);
+            pizzas->clear();
+            while (holder != "###")
+            {
+                std::string p_name; int p_bprice; std::vector<Topping> p_topps;
+                subholder = holder.split(';');
+                p_name = subholder[0].toStdString(); p_bprice = subholder[1].toInt();
+
+                ts.readLineInto(&holder);
+                subholder = holder.split(';');
+                for (int i = 0; i < subholder.size(); i++)
+                {
+                    for (Topping t: *toppings)
+                    {
+                        if (subholder[i].toStdString() == t.name) { p_topps.push_back(t); }
+                    }
+                }
+
+                Pizza p(p_name, p_bprice, p_topps); /// TO FIX: still includes vegan label even with meat; works fine at manual creation tho
+                pizzas->push_back(p);
+
+                ts.readLineInto(&holder);
+            }
         }
+
+        file.close();
     }
 }
 
