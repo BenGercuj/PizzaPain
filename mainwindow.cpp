@@ -256,7 +256,7 @@ void MainWindow::on_actionBet_lt_s_triggered()
                     }
                 }
 
-                Pizza p(p_name, p_bprice, p_topps); /// TO FIX: still includes vegan label even with meat; works fine at manual creation tho
+                Pizza p(p_name, p_bprice, p_topps);
                 pizzas->push_back(p);
 
                 ts.readLineInto(&holder);

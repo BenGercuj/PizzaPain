@@ -67,11 +67,14 @@ struct Pizza
                                     j = toppings[i].labels.size();
                                 }
                             }
+
+                            if (found_other) { i = toppings.size(); }
                         }
 
                         else
                         {
                             found_other = true;
+                            i = toppings.size();
                         }
                     }
 
