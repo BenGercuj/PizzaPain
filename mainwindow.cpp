@@ -207,32 +207,53 @@ void MainWindow::on_actionBet_lt_s_triggered()
 
             ts.readLineInto(&holder);
             labels->clear();
+            ui->label_listWidget->clear();
+            ui->existinglabel_listWidget->clear();
             while (holder != '#')
             {
                 subholder = holder.split(';');
                 labels->push_back({subholder[0].toStdString(), subholder[1].toInt(), false});
+
+                ui->existinglabel_listWidget->addItem(subholder[0] + " [" + subholder[1] + "]");
+                QListWidgetItem *item = new QListWidgetItem(subholder[0]);
+                item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
+                item->setCheckState(Qt::Unchecked);
+                ui->label_listWidget->addItem(item);
+
                 ts.readLineInto(&holder);
             }
+
+
 
             // TOPPINGS
 
             ts.readLineInto(&holder);
             toppings->clear();
+            ui->topping_listWidget->clear();
+            ui->existingtopping_listWidget->clear();
             while (holder != "##")
             {
                 subholder = holder.split(';');
                 Topping t_plh;
 
+                QString all_labels = "";
                 t_plh.name = subholder[0].toStdString(); t_plh.price = subholder[1].toInt();
                 for (int i = 2; i < subholder.size(); i++)
                 {
                     for (Label l: *labels)
                     {
-                        if (subholder[i].toStdString() == l.name) { t_plh.labels.push_back(l); }
+                        if (subholder[i].toStdString() == l.name) { t_plh.labels.push_back(l); all_labels += QString::fromStdString(l.name) + " "; }
                     }
                 }
 
                 toppings->push_back(t_plh);
+
+                ui->existingtopping_listWidget->addItem(subholder[0] + " [" + subholder[1] + " " + all_labels + "]");
+                QListWidgetItem *item = new QListWidgetItem(subholder[0]);
+                item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
+                item->setCheckState(Qt::Unchecked);
+                ui->topping_listWidget->addItem(item);
+
                 ts.readLineInto(&holder);
             }
 
@@ -240,6 +261,7 @@ void MainWindow::on_actionBet_lt_s_triggered()
 
             ts.readLineInto(&holder);
             pizzas->clear();
+            ui->existingpizza_listWidget->clear();
             while (holder != "###")
             {
                 std::string p_name; int p_bprice; std::vector<Topping> p_topps;
@@ -248,16 +270,25 @@ void MainWindow::on_actionBet_lt_s_triggered()
 
                 ts.readLineInto(&holder);
                 subholder = holder.split(';');
+                std::string all_toppings = "";
                 for (int i = 0; i < subholder.size(); i++)
                 {
                     for (Topping t: *toppings)
                     {
-                        if (subholder[i].toStdString() == t.name) { p_topps.push_back(t); }
+                        if (subholder[i].toStdString() == t.name) { p_topps.push_back(t); all_toppings += t.name + " "; }
                     }
                 }
 
                 Pizza p(p_name, p_bprice, p_topps);
                 pizzas->push_back(p);
+
+                std::string all_labels = "";
+                for (Label l: pizzas->back().labels)
+                {
+                    all_labels += l.name + " ";
+                }
+
+                ui->existingpizza_listWidget->addItem(QString::fromStdString(p_name + " [" + std::to_string(p_bprice) + " " + all_toppings + all_labels + std::to_string(pizzas->back().full_price) + " " + "]"));
 
                 ts.readLineInto(&holder);
             }
