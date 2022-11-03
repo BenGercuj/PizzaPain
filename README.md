@@ -1,1 +1,1 @@
-![](https://cdn.discordapp.com/attachments/892113497264099419/1037810896304603196/jewish-doctor-anomaly.gif)
+![](https://cdn.discordapp.com/emojis/947021315913687040.gif?size=128&quality=lossless)
