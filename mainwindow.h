@@ -39,6 +39,8 @@ private slots:
 
     void on_actionBet_lt_s_triggered();
 
+    void on_actionGener_l_s_triggered();
+
 private:
     Ui::MainWindow *ui;
 

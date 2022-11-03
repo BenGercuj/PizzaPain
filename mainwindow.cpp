@@ -187,21 +187,25 @@ void MainWindow::on_actionBet_lt_s_triggered()
 
             // BASICS
 
-            Basics b_plh;
+            QString b_name;
+            int b_transport_cost;
+            std::pair<QString, QString> b_open_hours[7];
+
             ts.readLineInto(&holder);
             subholder = holder.split(';');
 
-            b_plh.name = subholder[0];
-            b_plh.transport_cost = subholder[1].toInt();
+            b_name = subholder[0];
+            b_transport_cost = subholder[1].toInt();
 
             ts.readLineInto(&holder);
             subholder = holder.split(';');
             for (int i = 0; i < 7; i++)
             {
-                b_plh.open_hours[i].first = subholder[i*2];
-                b_plh.open_hours[i].second = subholder[i*2+1];
+                basics->open_hours[i].first = subholder[i*2];
+                basics->open_hours[i].second = subholder[i*2+1];
             }
-            this->basics = &b_plh;
+            basics->name = b_name;
+            basics->transport_cost = b_transport_cost;
 
             // LABELS
 
@@ -296,5 +300,48 @@ void MainWindow::on_actionBet_lt_s_triggered()
 
         file.close();
     }
+}
+
+
+void MainWindow::on_actionGener_l_s_triggered()
+{
+    std::vector<QString> handwrittenbullshit = {QString::fromLatin1("Hétfö"), QString::fromLatin1("Kedd"), QString::fromLatin1("Szerda"), QString::fromLatin1("Csütörtök"), QString::fromLatin1("Péntek"), QString::fromLatin1("Szombat"), QString::fromLatin1("Vasárnap") };
+    QFile web("index.html");
+    if (web.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        QTextStream ts(&web);
+        ts << "<html>\n" << "<head></head>\n";
+        ts << "<body>\n";
+
+        ts << "<h1>" + basics->name + "</h1>\n";
+        ts << QString::fromLatin1("<p>Szállítási költség: ") << basics->transport_cost << " Ft</p>\n";
+
+        ts << QString::fromLatin1("<h2>Nyitvatartás:</h2>\n"); // mindenhova latin1 kell mert ha nem változóból olvassa be AKKOR ÖSSZESZARJA MAGÁT EZ A HASZONTALAN UTOLSÓ ANGOLSZÁSZ RETEK
+        ts << "<table>\n";
+        for (int i = 0; i < 7; i++) { ts << "<tr><td>" + handwrittenbullshit[i] + "</td><td>" + basics->open_hours[i].first + " - " + basics->open_hours[i].second + "</td></tr>\n"; }
+        ts << "</table>\n";
+
+        ts << QString::fromLatin1("<h2>Kínálat</h2>\n");
+        for (size_t i = 0; i < pizzas->size(); i++)
+        {
+            ts << "<h3>" + QString::fromStdString((*pizzas)[i].name) + "</h3>\n";
+            ts << QString::fromLatin1("<p>Ár: ") << (*pizzas)[i].full_price << " Ft</p>\n";
+
+            ts << QString::fromLatin1("<p>Címkék:</p><ul>\n");
+            for (Label l: (*pizzas)[i].labels) { ts << "<li>" + QString::fromStdString(l.name) + "</li>\n"; }
+
+            ts << QString::fromLatin1("</ul><p>Feltétek:</p><ul>\n");
+            for (Topping t: (*pizzas)[i].toppings)
+            {
+                ts << "<li>" + QString::fromStdString(t.name) + QString::fromLatin1(", ár: ") << t.price << " Ft</li>\n";
+            }
+            ts << "</ul>\n";
+        }
+
+        ts << "</body>\n";
+        ts << "</html>";
+    }
+
+    web.close();
 }
 

@@ -328,7 +328,14 @@
     <addaction name="separator"/>
     <addaction name="actionKil_p_s"/>
    </widget>
+   <widget class="QMenu" name="menuWeboldal">
+    <property name="title">
+     <string>Weboldal</string>
+    </property>
+    <addaction name="actionGener_l_s"/>
+   </widget>
    <addaction name="menuF_jl"/>
+   <addaction name="menuWeboldal"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionBet_lt_s">
@@ -344,6 +351,11 @@
   <action name="actionKil_p_s">
    <property name="text">
     <string>Kilépés</string>
+   </property>
+  </action>
+  <action name="actionGener_l_s">
+   <property name="text">
+    <string>Generálás</string>
    </property>
   </action>
  </widget>
