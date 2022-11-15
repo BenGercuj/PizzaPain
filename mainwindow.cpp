@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     QObject::connect(ui->label_listWidget, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(setLabel(QListWidgetItem*)));
     QObject::connect(ui->topping_listWidget, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(setTopping(QListWidgetItem*)));
+    QObject::connect(ui->filter_listWidget, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(setFilter(QListWidgetItem*)));
 }
 
 MainWindow::~MainWindow()
@@ -34,6 +35,7 @@ void MainWindow::on_addButton_clicked()
     item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
     item->setCheckState(Qt::Unchecked);
     ui->label_listWidget->addItem(item);
+    ui->filter_listWidget->addItem(item);
 }
 
 void MainWindow::setLabel(QListWidgetItem* item)
@@ -99,6 +101,26 @@ void MainWindow::on_addButton_3_clicked()
     ui->existingpizza_listWidget->addItem(QString::fromStdString(name + " [" + std::to_string(base_price) + " " + all_toppings + all_labels + std::to_string(pizzas->back().full_price) + " " + "]"));
 }
 
+void MainWindow::setFilter(QListWidgetItem* item)
+{
+    bool is_selected = false;
+    for (Label &l: *labels)
+    {
+        if (item->text().toStdString() == l.name) { l.filter_selected = !l.filter_selected; is_selected = l.filter_selected; }
+    }
+
+    for (size_t i = 0; i < toppings->size(); i++)
+    {
+        for (size_t j = 0; j < (*toppings)[i].labels.size(); j++)
+        {
+            if (item->text().toStdString() == (*toppings)[i].labels[j].name)
+            {
+                if (is_selected) { ui->topping_listWidget->item(i)->setFlags(item->flags() & ~Qt::ItemIsEnabled | Qt::ItemIsUserCheckable); (*toppings)[i].selected = false; ui->topping_listWidget->item(i)->setCheckState(Qt::Unchecked); j = (*toppings)[i].labels.size(); }
+                else { ui->topping_listWidget->item(i)->setFlags(item->flags() & Qt::ItemIsEnabled | Qt::ItemIsUserCheckable); (*toppings)[i].selected = false; }
+            }
+        }
+    }
+}
 
 void MainWindow::on_save_pushButton_clicked()
 {
@@ -222,7 +244,9 @@ void MainWindow::on_actionBet_lt_s_triggered()
                 QListWidgetItem *item = new QListWidgetItem(subholder[0]);
                 item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
                 item->setCheckState(Qt::Unchecked);
+                QListWidgetItem *item2 = new QListWidgetItem((*item));
                 ui->label_listWidget->addItem(item);
+                ui->filter_listWidget->addItem(item2);
 
                 ts.readLineInto(&holder);
             }

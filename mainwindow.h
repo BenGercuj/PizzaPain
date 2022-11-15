@@ -5,6 +5,7 @@
 #include <QListWidget>
 #include <QFileDialog>
 #include "structs.hpp"
+#include <iostream>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -30,6 +31,8 @@ private slots:
     void setTopping(QListWidgetItem* item);
 
     void on_addButton_3_clicked();
+
+    void setFilter(QListWidgetItem* item);
 
     void on_save_pushButton_clicked();
 

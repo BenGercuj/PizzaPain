@@ -18,6 +18,7 @@ struct Label
     std::string name;
     int mode; // 0 - contains; 1 - all
     bool selected = false;
+    bool filter_selected = false;
 };
 
 struct Topping
